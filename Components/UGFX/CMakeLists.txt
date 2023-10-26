@@ -30,4 +30,5 @@ add_library(${COMPONENT_NAME} STATIC ${SOURCE_LIB})
 target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGDISP_SCREEN_WIDTH=240")
 target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGDISP_SCREEN_HEIGHT=320")
 # target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGFX_USE_OS_WIN32=GFXON")
-add_compile_options(-gdi32)
+
+target_link_libraries(${COMPONENT_NAME} gdi32)
