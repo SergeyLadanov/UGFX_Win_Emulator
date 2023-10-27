@@ -1,0 +1,39 @@
+name: Build C/C++
+
+on:
+  push:
+    branches: '*'
+  pull_request:
+    branches: '*'
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: install components
+        run: apt-get update && apt-get install make cmake mingw-w64 -y
+
+        
+       # -DCMAKE_AR=x86_64-w64-mingw32-gcc-ar
+      
+      - name: Generate build files
+        run: cmake . -G"Unix Makefiles" -B"build" -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++ -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc 
+      
+      
+      - name: Build
+        run: cmake --build ./build
+      
+      - name: Tar files
+        run: tar -cvf Build_Output.tar --directory=build Template.exe
+        
+      - name: Upload artifatcs
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build_Output.tar
+          path: |
+              Build_Output.tar   
