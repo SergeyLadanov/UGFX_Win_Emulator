@@ -26,13 +26,5 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: Template.exe
-          asset_name: Template_amd64_Windows_$tag.exe
-          tag: ${{ github.ref }}
-          
-      - name: Upload Linux executable file to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: Template
-          asset_name: Template_amd64_Linux_$tag
+          asset_name: Template_$tag.exe
           tag: ${{ github.ref }}
