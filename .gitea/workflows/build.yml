@@ -28,12 +28,12 @@ jobs:
       - name: Build
         run: cmake --build ./build
       
-      - name: Tar files
-        run: tar -cvf Build_Output.tar --directory=build Template.exe
+  #    - name: Tar files
+  #      run: tar -cvf Build_Output.tar --directory=build Template.exe
         
       - name: Upload artifatcs
         uses: actions/upload-artifact@v3
         with:
           name: Build_Output.tar
           path: |
-              Build_Output.tar   
+              build/Template.exe 
