@@ -3,11 +3,12 @@
 
 #include "UGFX_PresenterBase.hpp"
 #include "Model.hpp"
-
+#include "IMainPresenter.hpp"
 
 class MainScreen;
 
-class MainPresenter : public UGFX_PresenterBase, public Model::Listener
+
+class MainPresenter : public UGFX_PresenterBase, public Model::Listener, public IMainPresenter
 {
 protected:
     MainScreen &View;
@@ -16,6 +17,12 @@ public:
         :View(view)
     {
         
+    }
+
+
+    void TestInit(void) override
+    {
+
     }
 
     void Activate() override

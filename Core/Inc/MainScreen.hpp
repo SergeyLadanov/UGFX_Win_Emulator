@@ -4,9 +4,15 @@
 #include "UGFX_ViewBase.hpp"
 #include "GUI_App.hpp"
 #include "MainPresenter.hpp"
+#include "IMainPresenter.hpp"
 
-class MainScreen : public UGFX_ViewBase<GUI_App, MainPresenter>
+
+
+class MainScreen : public UGFX_ViewBase<GUI_App, IMainPresenter>
 {
+public:
+
+
 private:
     GHandle ghButton1;
     GHandle image1, image2, image3, image4;
