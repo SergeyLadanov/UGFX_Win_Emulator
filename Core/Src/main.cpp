@@ -72,6 +72,7 @@ static GUI_App AppTest(ModelInstance);
 
 int main( void )
 {
+	//FreeConsole();
 	AppTest.Start();
 
 

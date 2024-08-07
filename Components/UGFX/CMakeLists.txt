@@ -32,3 +32,5 @@ target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGDISP_SCREEN_HEIGHT=320")
 # target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGFX_USE_OS_WIN32=GFXON")
 
 target_link_libraries(${COMPONENT_NAME} gdi32 -static)
+target_link_libraries(${COMPONENT_NAME} -mwindows -static)
+
