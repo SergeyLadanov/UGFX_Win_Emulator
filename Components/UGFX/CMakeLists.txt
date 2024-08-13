@@ -15,16 +15,18 @@ FILE(
     )
 
 
+# Creating static library
+add_library(${COMPONENT_NAME} STATIC ${SOURCE_LIB})
+
 # Add includes
-include_directories(
+target_include_directories(
+    ${COMPONENT_NAME}
+    PUBLIC 
     Config
     ugfx_2.9
     ugfx_2.9/drivers/multiple/Win32
     RomFiles
 )
-
-# Creating static library
-add_library(${COMPONENT_NAME} STATIC ${SOURCE_LIB})
 
 
 target_compile_definitions(${COMPONENT_NAME} PUBLIC "-DGDISP_SCREEN_WIDTH=240")
