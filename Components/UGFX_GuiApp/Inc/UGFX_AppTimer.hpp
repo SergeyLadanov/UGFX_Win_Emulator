@@ -1,98 +1,91 @@
 #ifndef __UGFX_APPTIMER_HPP_
 #define __UGFX_APPTIMER_HPP_
 
-
 #include "gfx.h"
-
 
 class UGFX_AppTimer : private GTimer
 {
 private:
-    uint32_t TimerTicks = 0;
-    GTimerFunction TickCallBack = 0;
-    GTimerFunction EndCallBack = 0;
-    void *Arg = nullptr;
+	uint32_t TimerTicks = 0;
+	GTimerFunction TickCallBack = 0;
+	GTimerFunction EndCallBack = 0;
+	void *Arg = nullptr;
+
 public:
+	UGFX_AppTimer()
+	{
+		// printf("Timer constructor\r\n");
+		flags = 0;
+		param = this;
+		fn = [](void *arg)
+		{
+			UGFX_AppTimer *obj = (UGFX_AppTimer *) arg;
 
-    UGFX_AppTimer()
-    {
-        // printf("Timer constructor\r\n");
-        param = this;
-        fn = [](void *arg)
-        {
-            UGFX_AppTimer *obj = (UGFX_AppTimer *) arg;
+			if (obj->TickCallBack)
+			{
+				obj->TickCallBack(obj->Arg);
+			}
 
-            if (obj->TickCallBack)
-            {
-                obj->TickCallBack(obj->Arg);
-            }
+			if (obj->TimerTicks < 0xFFFFFFFF)
+			{
+				if (obj->TimerTicks != 0)
+				{
+					obj->TimerTicks--;
 
-            if (obj->TimerTicks < 0xFFFFFFFF)
-            {
-                if (obj->TimerTicks != 0)
-                {
-                    obj->TimerTicks--;
+					if (!obj->TimerTicks)
+					{
+						gtimerStop(obj);
+						if (obj->EndCallBack)
+						{
+							obj->EndCallBack(obj->Arg);
+						}
+					}
+				}
+			}
+		};
+	}
 
-                    if (!obj->TimerTicks)
-                    {
-                        if (obj->EndCallBack)
-                        {
-                            obj->EndCallBack(obj->Arg);
-                        }
-                        gtimerStop(obj);
-                    }
-                }
+	void SetTickCallBack(GTimerFunction callback)
+	{
+		TickCallBack = callback;
+	}
 
-            }
-        };
-    }
+	void SetEndCallBack(GTimerFunction callback)
+	{
+		EndCallBack = callback;
+	}
 
+	void SetArg(void *arg)
+	{
+		Arg = arg;
+	}
 
-    void SetTickCallBack(GTimerFunction callback)
-    {
-        TickCallBack = callback;
-    }
+	void Start(uint32_t period, uint32_t nTicks = 0xFFFFFFFF)
+	{
+		bool autoreload = true;
+		TimerTicks = nTicks;
 
-    void SetEndCallBack(GTimerFunction callback)
-    {
-        EndCallBack = callback;
-    }
+		Stop();
 
-    void SetArg(void *arg)
-    {
-        Arg = arg;
-    }
+		if (nTicks == 0)
+		{
+			autoreload = false;
+		}
 
-    void Start(uint32_t period, uint32_t nTicks = 0xFFFFFFFF)
-    {
-        bool autoreload = true;
-        TimerTicks = nTicks;
+		gtimerStart(this, fn, param, autoreload, period);
+	}
 
-        Stop();
+	void Stop(void)
+	{
+		if (gtimerIsActive(this))
+		{
+			gtimerStop(this);
+		}
+	}
 
-        if (nTicks == 0)
-        {
-            autoreload = false;
-        }
-
-        gtimerStart(this, fn, param, autoreload, period); 
-    }
-
-
-    void Stop(void)
-    {
-        if (gtimerIsActive(this))
-        {
-            gtimerStop(this);
-        }
-    }
-
-    ~UGFX_AppTimer()
-    {
-
-    }
+	~UGFX_AppTimer()
+	{
+	}
 };
-
-
 
 #endif

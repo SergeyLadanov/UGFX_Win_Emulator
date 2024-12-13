@@ -10,7 +10,8 @@ project(${COMPONENT_NAME})
 FILE(
     GLOB 
     SOURCE_LIB 
-    "ugfx_2.9/src/gfx_mk.c"
+    # "ugfx_2.9/src/gfx_mk.c"
+    "Extended/gfx_mk_extended.c"
     "ugfx_2.9/drivers/multiple/Win32/*.c"
     )
 
@@ -25,6 +26,7 @@ target_include_directories(
     Config
     ugfx_2.9
     ugfx_2.9/drivers/multiple/Win32
+    Extended
     RomFiles
 )
 

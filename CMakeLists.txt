@@ -9,6 +9,8 @@ set(EXECUTABLE ${PROJECT_NAME})
 # Язык C и C++
 enable_language(CXX C)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
 # Файлы с исходым кодом
 FILE(
     GLOB 

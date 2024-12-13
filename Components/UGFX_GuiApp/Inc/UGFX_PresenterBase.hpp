@@ -6,25 +6,21 @@
 class UGFX_PresenterBase
 {
 public:
-    UGFX_PresenterBase()
-    {
-        
-    }
+	UGFX_PresenterBase()
+	{
+	}
 
-    virtual void Activate(void)
-    {
+	virtual void Activate(void)
+	{
+	}
 
-    }
+	virtual void DeActivate(void)
+	{
+	}
 
-    virtual void DeActivate(void)
-    {
-        
-    }
-
-    virtual ~UGFX_PresenterBase()
-    {
-        
-    }
+	virtual ~UGFX_PresenterBase()
+	{
+	}
 };
 
 #endif

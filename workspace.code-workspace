@@ -8,7 +8,18 @@
 		"files.associations": {
 			"file1.h": "c",
 			"gwin_class.h": "c",
-			"compare": "cpp"
-		}
+			"compare": "cpp",
+			"gfx.h": "c"
+		},
+		"cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
+		"C_Cpp.files.exclude": {
+			  "build/**": true,
+		  },
+		 "files.watcherExclude": {
+			  "build/**": true,
+		  },
+		  "search.exclude": {
+			  "build/**": true,
+		  },
 	}
 }
