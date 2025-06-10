@@ -11,9 +11,9 @@ class MainScreen;
 class MainPresenter : public UGFX_PresenterBase, public Model::Listener, public IMainPresenter
 {
 protected:
-    MainScreen &View;
+    std::shared_ptr<MainScreen> View;
 public:
-    MainPresenter(MainScreen &view)
+    MainPresenter(std::shared_ptr<MainScreen> view)
         :View(view)
     {
         

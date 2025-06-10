@@ -20,6 +20,7 @@ public:
 
 	virtual ~UGFX_PresenterBase()
 	{
+		printf("UGFX_PresenterBase::~UGFX_PresenterBase()\n");
 	}
 };
 

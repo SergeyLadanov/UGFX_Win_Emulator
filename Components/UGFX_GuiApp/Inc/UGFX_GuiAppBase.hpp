@@ -6,12 +6,13 @@
 #include "UGFX_PresenterBase.hpp"
 #include "UGFX_ScreenBase.hpp"
 #include <type_traits>
+#include <memory>
 
 class UGFX_GuiAppBase
 {
 protected:
-	UGFX_ScreenBase *CurrentScreen = nullptr;
-	UGFX_PresenterBase *CurrentPresenter = nullptr;
+	std::shared_ptr<UGFX_ScreenBase> CurrentScreen;
+	std::shared_ptr<UGFX_PresenterBase> CurrentPresenter;
 	GListener Gl;
 	bool ScreenReady = false;
 
@@ -25,23 +26,24 @@ public:
 
 		DestroyScreen();
 
-		CurrentScreen = new TScreen();
+		CurrentScreen = std::make_shared<TScreen>();//new TScreen();
 
 		if (CurrentScreen)
 		{
-			CurrentPresenter = new TPresenter(*(TScreen *) CurrentScreen);
+			
+			CurrentPresenter = std::make_shared<TPresenter>(std::static_pointer_cast<TScreen>(CurrentScreen));//new TPresenter(*(TScreen *) CurrentScreen);
 
 			if (CurrentPresenter)
 			{
-				((TScreen *) CurrentScreen)->Bind(*(TApp *) this, *(TPresenter *) CurrentPresenter);
+				std::static_pointer_cast<TScreen>(CurrentScreen)->Bind(*(TApp *) this, std::static_pointer_cast<TPresenter>(CurrentPresenter));
 			}
 		}
 	}
 
 	template <typename TPresenter>
-	inline TPresenter *GetCurrentPresenter()
+	inline std::shared_ptr<TPresenter> GetCurrentPresenter()
 	{
-		return (TPresenter *) CurrentPresenter;
+		return std::static_pointer_cast<TPresenter>(CurrentPresenter);
 	}
 
 	template <typename TView>

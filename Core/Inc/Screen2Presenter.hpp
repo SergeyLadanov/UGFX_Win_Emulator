@@ -10,9 +10,9 @@ class Screen2;
 class Screen2Presenter : public UGFX_PresenterBase, public Model::Listener
 {
 protected:
-    Screen2 &View;
+    std::shared_ptr<Screen2> View;
 public:
-    Screen2Presenter(Screen2 &view)
+    Screen2Presenter(std::shared_ptr<Screen2> view)
         :View(view)
     {
         

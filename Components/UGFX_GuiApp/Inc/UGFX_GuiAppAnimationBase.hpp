@@ -2,6 +2,7 @@
 #define __UGFX_GUIAPPANIMATIONBASE_HPP_
 
 #include "UGFX_GuiAppBase.hpp"
+#include <memory>
 
 class UGFX_GuiAppAnimationBase : public UGFX_GuiAppBase
 {
@@ -15,8 +16,8 @@ public:
 	} AinmatoinType;
 
 protected:
-	UGFX_PresenterBase *NextPresenter = nullptr;
-	UGFX_ScreenBase *NextScreen = nullptr;
+	std::shared_ptr<UGFX_PresenterBase> NextPresenter;
+	std::shared_ptr<UGFX_ScreenBase> NextScreen;
 	UGFX_AppTimer Timer;
 	int16_t X_Step = 0;
 	int16_t Y_Step = 0;
@@ -38,7 +39,7 @@ public:
 		static_assert(std::is_base_of<UGFX_ScreenBase, TScreen>::value, "Template parameter TScreen must derive from UGFX_ScreenBase!");
 		static_assert(std::is_base_of<UGFX_PresenterBase, TPresenter>::value, "Template parameter TPresenter must derive from UGFX_PresenterBase!");
 
-		NextScreen = new TScreen();
+		NextScreen = std::make_shared<TScreen>();
 
 		ScreenReady = false;
 
@@ -86,10 +87,11 @@ public:
 		{
 			NextScreen->SetPos(StartPosX, StartPosY);
 
-			NextPresenter = new TPresenter(*(TScreen *) NextScreen);
+			NextPresenter = std::make_shared<TPresenter>(std::static_pointer_cast<TScreen>(NextScreen));
+			
 			if (NextPresenter)
 			{
-				((TScreen *) NextScreen)->Bind(*(TApp *) this, *(TPresenter *) NextPresenter);
+				std::static_pointer_cast<TScreen>(NextScreen)->Bind(*(TApp *) this, std::static_pointer_cast<TPresenter>(NextPresenter));
 			}
 
 			TransactionPeriod = period;
@@ -98,9 +100,10 @@ public:
 	}
 
 	template <typename TPresenter>
-	inline TPresenter *GetNextPresenter()
+	inline std::shared_ptr<TPresenter> GetNextPresenter()
 	{
-		return (TPresenter *) NextPresenter;
+		return std::static_pointer_cast<TPresenter>(NextPresenter);
+		
 	}
 
 	template <typename TView>

@@ -68,6 +68,7 @@ public:
 
 	virtual ~UGFX_ScreenBase()
 	{
+		printf("UGFX_ScreenBase::~UGFX_ScreenBase()\n");
 		GHandle child;
 
 		for (child = gwinGetFirstChild(Container); child; child = gwinGetFirstChild(Container))

@@ -44,15 +44,11 @@ void UGFX_GuiAppBase::DestroyScreen()
 	if (CurrentPresenter)
 	{
 		CurrentPresenter->DeActivate();
-		delete CurrentPresenter;
-		CurrentPresenter = nullptr;
 	}
 
 	if (CurrentScreen)
 	{
 		CurrentScreen->OnExitScreen();
-		delete CurrentScreen;
-		CurrentScreen = nullptr;
 	}
 }
 
