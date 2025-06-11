@@ -24,11 +24,9 @@ void UGFX_GuiAppAnimationBase::AnimationEndCallBack(void *arg)
 
 	obj->DestroyScreen();
 
-	obj->CurrentPresenter = obj->NextPresenter;
-	obj->NextPresenter = nullptr;
+	obj->CurrentPresenter = std::move(obj->NextPresenter);
 
-	obj->CurrentScreen = obj->NextScreen;
-	obj->NextScreen = nullptr;
+	obj->CurrentScreen = std::move(obj->NextScreen);
 
 	obj->CurrentScreen->SetPos(0, 0);
 
