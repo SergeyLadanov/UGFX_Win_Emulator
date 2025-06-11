@@ -15,8 +15,8 @@ public:
 	} AinmatoinType;
 
 protected:
-	UGFX_PresenterBase *NextPresenter = nullptr;
-	UGFX_ScreenBase *NextScreen = nullptr;
+	std::unique_ptr<UGFX_PresenterBase> NextPresenter = nullptr;
+	std::unique_ptr<UGFX_ScreenBase> NextScreen = nullptr;
 	UGFX_AppTimer Timer;
 	int16_t X_Step = 0;
 	int16_t Y_Step = 0;
@@ -38,7 +38,7 @@ public:
 		static_assert(std::is_base_of<UGFX_ScreenBase, TScreen>::value, "Template parameter TScreen must derive from UGFX_ScreenBase!");
 		static_assert(std::is_base_of<UGFX_PresenterBase, TPresenter>::value, "Template parameter TPresenter must derive from UGFX_PresenterBase!");
 
-		NextScreen = new TScreen();
+		NextScreen = std::make_unique<TScreen>();
 
 		ScreenReady = false;
 
@@ -86,10 +86,10 @@ public:
 		{
 			NextScreen->SetPos(StartPosX, StartPosY);
 
-			NextPresenter = new TPresenter(*(TScreen *) NextScreen);
+			NextPresenter = std::make_unique<TPresenter>(*static_cast<TScreen *>(NextScreen.get()));
 			if (NextPresenter)
 			{
-				((TScreen *) NextScreen)->Bind(*(TApp *) this, *(TPresenter *) NextPresenter);
+				static_cast<TScreen *>(NextScreen.get())->Bind(*static_cast<TApp *>(this), *static_cast<TPresenter *>(NextPresenter.get()));
 			}
 
 			TransactionPeriod = period;
@@ -100,13 +100,13 @@ public:
 	template <typename TPresenter>
 	inline TPresenter *GetNextPresenter()
 	{
-		return (TPresenter *) NextPresenter;
+		return static_cast<TPresenter *>(NextPresenter.get());
 	}
 
 	template <typename TView>
 	inline TView *GetNextView()
 	{
-		return (TView *) NextScreen;
+		return static_cast<TView *>(NextScreen.get());
 	}
 };
 

@@ -41,19 +41,6 @@ void UGFX_GuiAppBase::Start(uint32_t task_stack, gThreadpriority prio)
 void UGFX_GuiAppBase::DestroyScreen()
 {
 	ScreenReady = false;
-	if (CurrentPresenter)
-	{
-		CurrentPresenter->DeActivate();
-		delete CurrentPresenter;
-		CurrentPresenter = nullptr;
-	}
-
-	if (CurrentScreen)
-	{
-		CurrentScreen->OnExitScreen();
-		delete CurrentScreen;
-		CurrentScreen = nullptr;
-	}
 }
 
 void UGFX_GuiAppBase::EndScreenTransaction(void)

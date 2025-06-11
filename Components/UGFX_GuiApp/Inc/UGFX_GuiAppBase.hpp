@@ -6,12 +6,13 @@
 #include "UGFX_PresenterBase.hpp"
 #include "UGFX_ScreenBase.hpp"
 #include <type_traits>
+#include <memory>
 
 class UGFX_GuiAppBase
 {
 protected:
-	UGFX_ScreenBase *CurrentScreen = nullptr;
-	UGFX_PresenterBase *CurrentPresenter = nullptr;
+	std::unique_ptr<UGFX_ScreenBase> CurrentScreen = nullptr;
+	std::unique_ptr<UGFX_PresenterBase> CurrentPresenter = nullptr;
 	GListener Gl;
 	bool ScreenReady = false;
 
@@ -25,15 +26,15 @@ public:
 
 		DestroyScreen();
 
-		CurrentScreen = new TScreen();
+		CurrentScreen = std::make_unique<TScreen>();
 
 		if (CurrentScreen)
 		{
-			CurrentPresenter = new TPresenter(*(TScreen *) CurrentScreen);
+			CurrentPresenter = std::make_unique<TPresenter>(*static_cast<TScreen *>(CurrentScreen.get()));
 
 			if (CurrentPresenter)
 			{
-				((TScreen *) CurrentScreen)->Bind(*(TApp *) this, *(TPresenter *) CurrentPresenter);
+				static_cast<TScreen *>(CurrentScreen.get())->Bind(*static_cast<TApp *>(this), *static_cast<TPresenter *>(CurrentPresenter.get()));
 			}
 		}
 	}
@@ -41,13 +42,13 @@ public:
 	template <typename TPresenter>
 	inline TPresenter *GetCurrentPresenter()
 	{
-		return (TPresenter *) CurrentPresenter;
+		return static_cast<TPresenter *>(CurrentPresenter.get());
 	}
 
 	template <typename TView>
 	inline TView *GetCurrentView()
 	{
-		return (TView *) CurrentScreen;
+		return static_cast<TView *>(CurrentScreen.get());
 	}
 
 	void Start(uint32_t task_stack = 512, gThreadpriority prio = gThreadpriorityLow);
